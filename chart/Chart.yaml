@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+description: A Helm chart for deploying vLLM Semantic Router Demo
+name: vllm-router-demo
+version: 0.0.1
+maintainers:
+  - name: noconnor
+# dependencies:
+#   - name: "litellm-helm"
+#     repository: "oci://ghcr.io/berriai"
+#     version: "0.1.501"

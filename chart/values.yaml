@@ -1,0 +1,8 @@
+---
+cluster_domain: apps.cluster-xyz.opentlc.com
+
+# to create configmap from python files
+proxy_config_files:
+  - name: custom_auth.py
+  - name: custom_callbacks.py
+  - name: custom_router.py

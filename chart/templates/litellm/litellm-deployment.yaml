@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: litellm
+  labels:
+    app: litellm
+spec:
+  selector:
+    matchLabels:
+      app: litellm
+  template:
+    metadata:
+      labels:
+        app: litellm
+    spec:
+      containers:
+      - name: litellm
+        image: quay.io/ckavili/litellm:main-latest #image that contains semantic router libraries
+        args:
+          - '--config'
+          - /app/proxy_server_config.yaml
+        env:
+        - name: BASE_API
+          valueFrom:
+            configMapKeyRef:
+              name: base-api
+              key: BASE_API
+        ports:
+        - containerPort: 4000
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/proxy_server_config.yaml
+          subPath: config.yaml
+        - name: custom-auth
+          mountPath: /app/custom_auth.py
+          subPath: custom_auth.py
+        - name: custom-callbacks
+          mountPath: /app/custom_callbacks.py
+          subPath: custom_callbacks.py
+        - name: custom-router
+          mountPath: /app/custom_router.py
+          subPath: custom_router.py  
+      volumes:
+        - name: config-volume
+          configMap:
+            name: litellm-config-file
+        - name: custom-auth
+          configMap:
+            name: custom-auth
+            items:
+              - key: "custom_auth.py"
+                path: "custom_auth.py"
+        - name: custom-callbacks
+          configMap:
+            name: custom-callbacks
+            items:
+              - key: "custom_callbacks.py"
+                path: "custom_callbacks.py"
+        - name: custom-router
+          configMap:
+            name: custom-router
+            items:
+              - key: "custom_router.py"
+                path: "custom_router.py"

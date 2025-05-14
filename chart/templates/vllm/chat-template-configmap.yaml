@@ -1,0 +1,9 @@
+{{- $path := printf "prompt/chat_template.jinja" }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chat-template
+data:
+  chat.jinja: |
+  {{- $.Files.Get $path | nindent 4 -}}

@@ -1,0 +1,19 @@
+---
+{{- range $key := .Values.proxy_config_files }}
+{{- $path := printf "litellm-configs/%s" .name }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ regexReplaceAll "_" .name "-" | trimAll ".py" }} 
+data:
+  {{ .name }}: |
+  {{- $.Files.Get $path | nindent 4 -}}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: base-api
+data:
+  BASE_API: "http://vllm-predictor.{{ .Release.Namespace }}.svc.cluster.local:8080/v1/"

@@ -1,0 +1,9 @@
+{{- $path := printf "litellm-configs/pass_through_config.yaml" }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: litellm-config-file
+data:
+  config.yaml: |
+  {{- $.Files.Get $path | nindent 4 -}}

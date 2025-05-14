@@ -1,0 +1,44 @@
+model_list:
+ - model_name: dcot
+   litellm_params:
+     model: openai/dcot
+     api_key: "test2"
+     api_base: os.environ/BASE_API
+     stop: "<|end of conversation|>" 
+    #  roles: {"system":{"pre_message":"[Question] ", "post_message":"<|im_end|>"}, "assistant":{"pre_message":"<|im_start|>assistant\n","post_message":"<|im_end|>"}, "user":{"pre_message":"<|im_start|>user\n","post_message":"<|im_end|>"}}
+ - model_name: doctor
+   litellm_params:
+     model: openai/doctor
+     api_key: "fake-key"
+     api_base: os.environ/BASE_API
+     temperature: 0.1
+     stop: '["<|end|>","<|end of conversation|>]' 
+ - model_name: phi2
+   litellm_params:
+     model: openai/microsoft/phi-2
+     api_key: "fake-key"
+     api_base: os.environ/BASE_API
+     bos_token: "<|endoftext|>"
+     eos_token: "<|endoftext|>"
+     stop: "<|end|>"
+#  - model_name: "main"
+#    litellm_params:
+#      model: "*"
+#      api_key: "fake-key"
+#      api_base: os.environ/BASE_API
+general_settings: 
+ master_key: sk-1234 
+ custom_auth: custom_auth.user_api_key_auth
+ log_raw_request_response: True
+ set_verbose: false
+cache: false
+litellm_settings: # module level litellm settings - https://github.com/BerriAI/litellm/blob/main/litellm/__init__.py
+  drop_params: True
+  log_raw_request_response: True
+  return_response_headers: true
+  callbacks: custom_router.proxy_handler_instance
+
+router_settings:
+  num_retries: 2
+  timeout: 30
+  
