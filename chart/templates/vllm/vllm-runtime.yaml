@@ -19,7 +19,7 @@ spec:
     - args:
         - --port=8080
         - --model=/mnt/models
-        - --served-model-name={{.Name}}
+        - '--served-model-name=microsoft/phi-2'
         - --dtype
         - float16
         - --max-lora-rank
