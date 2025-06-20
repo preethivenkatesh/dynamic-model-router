@@ -36,19 +36,19 @@ This repository packages all the required components as a helm chart, which help
 
 ## Clone
 ```bash
-git clone https://github.com/rh-ai-kickstart/vllm-router-demo
-cd vllm-router-demo/chart
+git clone https://github.com/rh-ai-kickstart/dynamic-model-router
+cd dynamic-model-router/chart
 ```
 
 ## Create a project
 ```bash
-PROJECT="vllm-router-demo-demo"
+PROJECT="dynamic-model-router-demo"
 oc new-project ${PROJECT}
 ```
 
 ## Install with Helm
 ```bash
-helm install vllm-router-demo . --namespace ${PROJECT}
+helm install dynamic-model-router . --namespace ${PROJECT}
 ```
 
 ## Validating the deployment
@@ -80,5 +80,5 @@ The code is located in [litellm-config/custom_router.py](chart/litellm-configs/c
 
 # Uninstall
 ```bash
-helm uninstall vllm-router-demo --namespace ${PROJECT} 
+helm uninstall dynamic-model-router --namespace ${PROJECT} 
 ```
