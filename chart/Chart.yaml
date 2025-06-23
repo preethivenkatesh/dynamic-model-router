@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
 description: A Helm chart for deploying vLLM Semantic Router Demo
-name: vllm-router-demo
+name: dynamic-model-router
 version: 0.0.1
 maintainers:
   - name: noconnor
