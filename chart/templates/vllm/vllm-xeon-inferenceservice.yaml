@@ -1,0 +1,27 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: phi2-xeon-cpu
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: vllm-xeon
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        requests:
+          memory: "24Gi"
+          cpu: "40"
+        limits:
+          memory: "32Gi"
+          cpu: "40"
+      runtime: vllm-xeon-runtime
+      # storageUri: oci://quay.io/ckavili/phi2-modelcar:0.0.5

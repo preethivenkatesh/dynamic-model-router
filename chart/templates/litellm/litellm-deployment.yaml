@@ -21,11 +21,10 @@ spec:
           - '--config'
           - /app/proxy_server_config.yaml
         env:
-        - name: BASE_API
-          valueFrom:
-            configMapKeyRef:
-              name: base-api
-              key: BASE_API
+        - name: XEON_API_BASE
+          value: "http://vllm-xeon-predictor.{{ .Release.Namespace }}.svc.cluster.local:8080/v1"
+        - name: GAUDI_API_BASE
+          value: "http://standard-granite-31-8b-instruct-predictor.ed-modelcar.svc.cluster.local:8080/v1/"
         ports:
         - containerPort: 4000
         volumeMounts:

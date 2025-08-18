@@ -30,13 +30,26 @@ spec:
             - name: GLOBAL_LOG_LEVEL
               value: DEBUG
             - name: OPENAI_API_BASE_URL
-              value: http://litellm.{{ .Release.Namespace }}.svc.cluster.local:4000
+              value: http://litellm.{{ .Release.Namespace }}.svc.cluster.local:4000/v1
             - name: WEBUI_SECRET_KEY
               value: dummy
+            - name: DEFAULT_MODELS
+              value: "auto"
+            - name: DEFAULT_MAX_TOKENS
+              value: "100"
+            - name: DEFAULT_TEMPERATURE
+              value: "0.7"  
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 6
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: open-webui
@@ -47,4 +60,3 @@ spec:
         - name: open-webui
           persistentVolumeClaim:
             claimName: open-webui
-

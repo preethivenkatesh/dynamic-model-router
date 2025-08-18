@@ -1,8 +1,42 @@
 ---
+# Default values for dynamic-model-router
+# This is a YAML-formatted file.
+
+# Override the name of the chart
+nameOverride: ""
+fullnameOverride: ""
+
+# Service account
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
 cluster_domain: apps.cluster-xyz.opentlc.com
+
+# Dual hardware deployment configuration
+hardware:
+  xeon:
+    enabled: true
+    resources:
+      cpu: 4
+      memory: "16Gi"
+  gaudi:
+    enabled: true
+    resources:
+      cpu: 2
+      memory: "8Gi"
+      accelerator: 1
+
+# LoRA adapter configuration - disabled for dual hardware setup
+lora:
+  enabled: false
 
 # to create configmap from python files
 proxy_config_files:
   - name: custom_auth.py
   - name: custom_callbacks.py
   - name: custom_router.py
+

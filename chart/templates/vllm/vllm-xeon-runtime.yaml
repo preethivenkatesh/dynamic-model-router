@@ -1,0 +1,101 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/recommended-accelerators: '["cpu"]'
+    opendatahub.io/runtime-version: v0.7.2
+    openshift.io/display-name: vLLM CPU ServingRuntime for KServe
+    opendatahub.io/apiProtocol: REST
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: vllm-xeon-runtime    
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  builtInAdapter:
+    modelLoadingTimeoutMillis: 300000
+  containers:
+    - args:
+        - --port=8080
+        - --model
+        - microsoft/phi-2
+        - '--served-model-name=microsoft/phi-2'
+        - --chat-template
+        - "/prompt/chat.jinja"
+        - --block-size
+        - "128"
+        - --max-model-len
+        - "512"
+        - --enforce-eager
+        - --max-num-batched-tokens
+        - "512"
+        - --max-num-seqs
+        - "8"
+      env:
+        - name: HF_HOME
+          value: "/tmp/huggingface"
+        - name: NUMBA_CACHE_DIR
+          value: "/tmp/numba_cache"
+        - name: NUMBA_DISABLE_JIT
+          value: "1"
+        - name: OUTLINES_CACHE_DIR
+          value: "/tmp/outlines_cache"
+        - name: XDG_CACHE_HOME
+          value: "/tmp"
+        - name: HOME
+          value: "/tmp"
+        - name: VLLM_CPU_KVCACHE_SPACE
+          value: "4"
+        - name: VLLM_RPC_TIMEOUT
+          value: "100000"
+        - name: VLLM_ALLOW_LONG_MAX_MODEL_LEN
+          value: "1"
+        - name: VLLM_ENGINE_ITERATION_TIMEOUT_S
+          value: "120"
+        - name: VLLM_CPU_SGL_KERNEL
+          value: "0"
+      image: public.ecr.aws/q9t5s3a7/vllm-cpu-release-repo:v0.9.1
+      name: kserve-container
+      securityContext:
+        privileged: true
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      readinessProbe:
+        httpGet:
+          path: /health
+          port: 8080
+        initialDelaySeconds: 60
+        periodSeconds: 15
+        timeoutSeconds: 10
+        failureThreshold: 10
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+        - mountPath: /prompt/chat.jinja
+          subPath: chat.jinja
+          name: chat-template
+      resources:
+        requests:
+          memory: "24Gi"
+          cpu: "40"
+        limits:
+          memory: "32Gi"
+          cpu: "40"
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 4Gi
+      name: shm
+    - name: chat-template
+      configMap:
+        name: chat-template
+        items:
+          - key: "chat.jinja"
+            path: "chat.jinja"
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM

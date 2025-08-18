@@ -16,4 +16,5 @@ kind: ConfigMap
 metadata:
   name: base-api
 data:
-  BASE_API: "http://vllm-predictor.{{ .Release.Namespace }}.svc.cluster.local:8080/v1/"
+  XEON_API_BASE: "http://vllm-xeon-predictor.{{ .Release.Namespace }}.svc.cluster.local:8080/v1/"
+  GAUDI_API_BASE: "http://standard-granite-31-8b-instruct-predictor.ed-modelcar.svc.cluster.local:8080/v1/"
