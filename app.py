@@ -27,9 +27,10 @@ if st.button("Send"):
                           headers={"Content-Type":"application/json"},
                           data=json.dumps(body), timeout=60)
         data = r.json()
-        used_model = data.get("model", "unknown")
-        final_hw= "Intel® Xeon®" if "simple-xeon" in used_model.lower() else "Intel® Gaudi™"
-        selected_model = data.get("extra_body", {}).get("selected_model")    
+        used_model = data.get("model", "unknown")        
+        #selected_model = data.get("extra_body", {}).get("used_model")  
+        final_hw= "Intel® Xeon®" if "microsoft/phi-2" in used_model.lower() else "Intel® Gaudi™"
+        print(final_hw)        
         if data.get("choices"):
             content = data["choices"][0]["message"].get("content", "")
         st.markdown(f"**Hardware Choice** `{final_hw}`")
